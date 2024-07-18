@@ -9,5 +9,5 @@ app
   .listen(process.env.API_PORT || 3049);
 
 console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
+  `🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}`
 );

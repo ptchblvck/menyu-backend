@@ -5,8 +5,10 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/client"
+  provider        = "prisma-client-js"
+  // enabling the preview Omit feature
+  previewFeatures = ["omitApi"]
+  output          = "../src/generated/client"
 }
 
 datasource db {
@@ -16,80 +18,93 @@ datasource db {
 
 model Restaurant {
   id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
   name      String    @unique
   image     String?
   address   String
+  address2  String?
+  address3  String?
+  address4  String?
   city      String
-  state     String    @db.VarChar(2)
   zip       String    @db.VarChar(10)
+  country   String    @db.VarChar(2)
   hours     String
   phone     String?
   email     String?
   website   String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
   menus     Menu[]
 }
 
 model Menu {
-  id                    Int        @id @default(autoincrement())
-  name                  String     @unique
+  id                    Int           @id @default(autoincrement())
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  deletedAt             DateTime?
+  name                  String        @unique
   price                 Int
   description           String
-  image                 String
+  image                 String?
   labelId               Int
-  label                 Label      @relation(fields: [labelId], references: [id])
+  label                 Label         @relation(fields: [labelId], references: [id])
+  allergenics           Allergenics[]
   restaurantId          Int
-  dateAvailable         DateTime
+  dateAvailable         DateTime      @default(now())
   tags                  String[]
-  daysAvailableFromDate Int        @default(1)
-  createdAt             DateTime   @default(now())
-  updatedAt             DateTime   @updatedAt
-  deletedAt             DateTime?
+  daysAvailableFromDate Int           @default(1)
   favorites             Favorite[]
   likes                 Like[]
-  restaurant            Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurant            Restaurant    @relation(fields: [restaurantId], references: [id])
 }
 
 model Like {
   id        Int       @id @default(autoincrement())
-  userId    Int
-  menuId    Int
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+  userId    Int
+  menuId    Int
   menu      Menu      @relation(fields: [menuId], references: [id])
   user      User      @relation(fields: [userId], references: [id])
 }
 
 model Favorite {
   id        Int       @id @default(autoincrement())
-  userId    Int
-  menuId    Int
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+  userId    Int
+  menuId    Int
   menu      Menu      @relation(fields: [menuId], references: [id])
   user      User      @relation(fields: [userId], references: [id])
 }
 
 model User {
   id        Int        @id @default(autoincrement())
-  email     String     @unique
-  name      String
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   deletedAt DateTime?
+  email     String     @unique
+  name      String
   favorites Favorite[]
   likes     Like[]
 }
 
 model Label {
   id        Int       @id @default(autoincrement())
-  name      String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+  name      String    @unique
+  menus     Menu[]
+}
+
+model Allergenics {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  name      String    @unique
   menus     Menu[]
 }

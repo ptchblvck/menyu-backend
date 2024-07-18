@@ -5,7 +5,34 @@ declare global {
   var prisma: PrismaClient | undefined;
 }
 
-export const prisma = global.prisma || new PrismaClient();
+// omitting deletedAt field from all models
+export const prisma =
+  global.prisma ||
+  new PrismaClient({
+    omit: {
+      allergenics: {
+        deletedAt: true,
+      },
+      menu: {
+        deletedAt: true,
+      },
+      restaurant: {
+        deletedAt: true,
+      },
+      user: {
+        deletedAt: true,
+      },
+      label: {
+        deletedAt: true,
+      },
+      like: {
+        deletedAt: true,
+      },
+      favorite: {
+        deletedAt: true,
+      },
+    },
+  });
 
 // eslint-disable-next-line
 if (process.env.NODE_ENV !== "production") global.prisma = prisma;
