@@ -15,7 +15,7 @@ datasource db {
 }
 
 model Restaurant {
-  id        String    @id @default(uuid())
+  id        Int       @id @default(autoincrement())
   name      String    @unique
   image     String?
   address   String
@@ -33,13 +33,14 @@ model Restaurant {
 }
 
 model Menu {
-  id                    String     @id @default(uuid())
+  id                    Int        @id @default(autoincrement())
   name                  String     @unique
   price                 Int
   description           String
   image                 String
-  label                 Label      @default(UNKNOWN)
-  restaurantId          String
+  labelId               Int
+  label                 Label      @relation(fields: [labelId], references: [id])
+  restaurantId          Int
   dateAvailable         DateTime
   tags                  String[]
   daysAvailableFromDate Int        @default(1)
@@ -52,9 +53,9 @@ model Menu {
 }
 
 model Like {
-  id        String    @id @default(uuid())
-  userId    String
-  menuId    String
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  menuId    Int
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
@@ -63,9 +64,9 @@ model Like {
 }
 
 model Favorite {
-  id        String    @id @default(uuid())
-  userId    String
-  menuId    String
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  menuId    Int
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
@@ -74,7 +75,7 @@ model Favorite {
 }
 
 model User {
-  id        String     @id @default(uuid())
+  id        Int        @id @default(autoincrement())
   email     String     @unique
   name      String
   createdAt DateTime   @default(now())
@@ -84,11 +85,11 @@ model User {
   likes     Like[]
 }
 
-enum Label {
-  UNKNOWN
-  OMNIVORE
-  VEGETARIAN
-  VEGAN
-  GLUTEN_FREE
-  DAIRY_FREE
+model Label {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  menus     Menu[]
 }
