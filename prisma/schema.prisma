@@ -55,7 +55,7 @@ model Menu {
   daysAvailableFromDate Int           @default(1)
   favorites             Favorite[]
   likes                 Like[]
-  restaurant            Restaurant    @relation(fields: [restaurantId], references: [id])
+  restaurant            Restaurant    @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
 }
 
 model Like {
@@ -65,8 +65,8 @@ model Like {
   deletedAt DateTime?
   userId    Int
   menuId    Int
-  menu      Menu      @relation(fields: [menuId], references: [id])
-  user      User      @relation(fields: [userId], references: [id])
+  menu      Menu      @relation(fields: [menuId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Favorite {
@@ -76,8 +76,8 @@ model Favorite {
   deletedAt DateTime?
   userId    Int
   menuId    Int
-  menu      Menu      @relation(fields: [menuId], references: [id])
-  user      User      @relation(fields: [userId], references: [id])
+  menu      Menu      @relation(fields: [menuId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model User {
